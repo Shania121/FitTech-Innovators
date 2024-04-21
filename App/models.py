@@ -1,4 +1,4 @@
-from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy 
 from sqlalchemy.sql.expression import func
 from werkzeug.security import check_password_hash, generate_password_hash
 
