@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+
+{% block title %}FitTech Innovators Sign Up{% endblock %}
+
+{% block styles %}
+section {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+}
+
+.imgBx {
+  position: relative;
+  width: 50%;
+  height: 100%;
+  overflow: hidden; 
+}
+
+.imgBx img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.contentBx {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%;
+  height: 100%;
+}
+
+.formBx {
+  width: 50%;
+}
+
+.formBx h2 {
+  color: #607d8b;
+  font-weight: 600;
+  font-size: 1.5em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  border-bottom: 4px solid #bc3908;
+  display: inline-block;
+  letter-spacing: 1px;
+}
+
+.inputBx {
+  margin-bottom: 20px;
+}
+
+.inputBx span {
+  font-size: 16px;
+  margin-bottom: 5px;
+  display: inline-block;
+  color: #607d8b;
+  font-weight: 300;
+  font-size: 16px;
+  letter-spacing: 1px;
+}
+
+.inputBx input {
+  width: 100%;
+  padding: 10px 20px;
+  outline: none;
+  font-weight: 400;
+  border: 1px solid #607d8b;
+  font-size: 16px;
+  letter-spacing: 1px;
+  color: #607d8b;
+  background: transparent;
+  border-radius: 30px;
+}
+
+.inputBx input[type="submit"] {
+  background: #bc3908;
+  color: #fff;
+  outline: none;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  width: 100%;
+}
+
+.inputBx input[type="submit"]:hover {
+  background: #621708;
+}
+
+.inputBx p {
+  color: #607d8b;
+}
+
+.inputBx p a {
+  color: #bc3908;
+}
+
+
+{% endblock %}
+
+{% block content %}
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<nav class="white black-text" style="padding: 10px">
+  <div class="nav-wrapper">
+      <ul class="flashes">
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+      </ul>
+  </div>
+</nav>
+{% endif %}
+{% endwith %}
+<section>
+  <div class="imgBx">
+    <img src="static/images/signupimage.png">
+
+  </div>
+  <div class="contentBx">
+    <div class="formBx">
+      <h2>Sign Up</h2>
+      <form  method="POST"  action="/signup">
+        <div class="inputBx">
+          <span>Username</span>
+          <input type="text" name="username" placeholder="Username">
+        </div>
+        <div class="inputBx">
+          <span>Email</span>
+          <input type="email" name="email" placeholder="Email Address">
+        </div>
+        <div class="inputBx">
+          <span>Password</span>
+          <input type="password" name="password" placeholder="Enter your password">
+        </div>
+        <div class="inputBx">
+          <input type="submit" value="Create Account">
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

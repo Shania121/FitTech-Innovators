@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+
+{% block title %}My Routines{% endblock %}
+
+{% block styles %}
+.nav-wrapper {
+  background-color: #0C0C0C;
+}
+li:hover {
+  background-color: #9B3922;
+}
+
+.brand-logo img {
+  width: 70px;
+  height: auto;
+}
+
+.card {
+  border-radius: 0px;
+  background-color: #000;
+  color: #fff;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  background-color: #f5f5f5;
+  flex-grow: 1;
+}
+
+.btn-floating halfway-fab waves-effect waves-light red:hover {
+  background: #F2613F;
+}
+
+.center-heading {
+  text-align: center;
+}
+
+.profile-image {
+  width: 40px;
+  height: auto;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  padding: 10px 0;
+  z-index: 1;
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+.dropdown-menu li {
+  display: block;
+}
+
+.dropdown-menu li a {
+  display: block;
+  padding: 10px;
+  color: #333;
+  text-decoration: none;
+}
+
+.dropdown-menu li a:hover {
+  background-color: #9B3922;
+}
+
+.scroll-container {
+  max-height: 500px; 
+  overflow-y: auto; 
+}
+
+.homebackground{
+  background: url("/static/images/routinesbkg.jpg") no-repeat;
+  background-size: cover;
+  height:100vh;
+  background-position: center 70%; 
+  position: relative;
+}
+
+.homebackground::before{
+  content: '';
+  position: absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background: rgba(0,0,0,0.5);
+}
+
+.workout-image {
+  width: 150px;
+  height: 100px;
+}
+
+
+{% endblock %}
+
+{% block content %}
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<nav class="white black-text" style="padding: 10px">
+  <div class="nav-wrapper">
+      <ul class="flashes">
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+      </ul>
+  </div>
+</nav>
+{% endif %}
+{% endwith %}
+
+<div class="homebackground">
+  <nav>
+    <div class="nav-wrapper">
+      <a href="#" class="brand-logo">
+        <img src="/static/images/logoicon.jpg" alt="FitTech Logo"> 
+      </a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li><a href="/home">Home</a></li>
+        <li><a href="/workouts">Workouts</a></li>
+        <li><a href="/routines">My Routines</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" style="margin-top: -1px;">
+           Profile
+          </a>
+          <ul class="dropdown-menu">
+            <li><a href="/logout">Logout</a></li>
+          </ul>
+        </li>  
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="row">
+      <div class="col s12 m6">
+        <h4 class="center-heading">My Routines</h4>
+        <div class="row scroll-container"> 
+          {% if routines %}
+            {% for routine in routines %}
+              <div class="col s12 m6">
+                <div class="card">
+                  <div class="card-content">
+                    <span class="card-title">{{ routine.name }}</span>
+                    <a href="/routines/{{routine.id}}" method="GET">See routine</a>
+                  </div>
+                  <div class="card-action">
+                    <form action="/deleteRoutine/{{ routine.id }}" method="POST">
+                      <button type="submit" class="btn-floating halfway-fab waves-effect waves-light red">
+                        <i class="material-icons">delete</i>
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          {% else %}
+          <div class="col s12">
+            <div class="card">
+              <div class="card-content">
+          <h5 class="center-heading">No routines found.</h5>
+                </div>
+                  </div>
+                </div>
+          {% endif %}
+        </div>
+      </div>
+      <div class="col s12 m6">
+        <h4 class="center-heading">Routine Details</h4>
+        <div class="row scroll-container">
+          {% if myroutine %}
+            {% for routine in myroutine %}
+              <div class="col s12">
+                <div class="card" style="width: 450px;">
+                  <div class="card-content">
+                    <div class="row">
+                      <div class="col s4">
+                        <img src="{{ routine.workout.image }}" class="workout-image" style="padding-right: 20px;">
+                      </div>
+                      <div class="col s8">
+                        <span class="card-title">{{ routine.workout.title }}</span>
+                        <p>Muscle Group: {{ routine.workout.bodypart }}</p>
+                        <p>Exercise Description: {{routine.workout.description}}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-action">
+                    <form action="/deleteWorkouts/{{ routine.id }}" method="POST">
+                      <button type="submit" class="btn-floating halfway-fab waves-effect waves-light red">
+                        <i class="material-icons">delete</i>
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          {% else %}
+          <div class="col s12">
+            <div class="card">
+              <div class="card-content">
+                <h5 class="center-heading">No workout added.</h5>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
