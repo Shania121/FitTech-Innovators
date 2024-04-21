@@ -4,7 +4,7 @@ from functools import wraps
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.sql.functions import user
 
-from App.models import db, User, Workout, Routine, RoutineWorkouts
+from models import db, User, Workout, Routine, RoutineWorkouts
 import csv
 
 from flask_jwt_extended import (
