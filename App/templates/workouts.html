@@ -1,0 +1,530 @@
+{%extends "base.html"%}
+{%block title%}FitTech Workouts{%endblock%}
+
+{%block styles%}
+main{
+background-color: #481E14;
+}
+
+.nav-wrapper{
+  background-color: #0C0C0C;
+}
+li:hover{
+  background-color: #F2613F;
+}
+
+.brand-logo img {
+  width: 70px; 
+  height: auto; 
+}
+
+.card{
+  width:325px;
+  height:400px;
+  border-radius: 10px;
+  background-color: #0C0C0C;
+}
+.card-image img{
+  width:100%;
+  height:262px; 
+}
+.card-content{
+background-color:#0C0C0C;
+}
+.card-title{
+  color: white;
+}
+.card-content h8{
+  color: white;
+}
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  background-color: #9B3922;
+  flex-grow: 1;
+}
+
+.btn-floating halfway-fab waves-effect waves-light red:hover{
+  background: #F2613F;
+}
+
+
+.popup {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-height: 80vh;
+  overflow-y:auto;
+}
+
+.popup form {
+  margin-bottom: 10px;
+}
+
+.popup label {
+  display: block;
+}
+
+.popup input[type="text"],
+.popup input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+.popup input[type="text"] {
+  width: 200px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.popup input[type="submit"] {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.popup input[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+.routinename{
+  font-size: 20px;
+  color: #fff;
+}
+
+.sidenav {
+  height: 100%;
+  width: 160px;
+  position: fixed; 
+  z-index: 1; 
+  top: 0; 
+  left: 0;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+.rating{
+  float:left;
+  width:50%;
+  text-align:center;
+  background-color: #F2613F;
+}
+
+.equip{
+  float:right;
+  width:50%;
+  text-align: center;
+  background-color: #F2613F;
+}
+
+.descrip{
+  padding-top:50px;
+  color: white;
+  height: 75vh;
+}
+
+.filter{
+background-color: #9B3922;
+padding-top:10px;
+padding-bottom:3px;
+}
+
+.filter label{
+color:white;
+}
+.popup-header{
+  position: absolute;
+  top: 2%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+.center-heading { 
+  text-align: center;
+  color: white;
+}
+
+.input-box {
+  position: relative;
+}
+
+.input-box .btn {
+  position: relative;
+  bottom: 5px;
+  left: 50px;
+  background-color: #F2613F;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  padding: 10px 0;
+  z-index: 1;
+}
+
+.dropdown-menu li {
+  display: block;
+}
+
+.dropdown-menu li a {
+  display: block;
+  padding: 10px;
+  color: #333;
+  text-decoration: none;
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+.username,
+.email {
+  display: block;
+  padding: 8px 16px;
+  color: #333;
+}
+
+.profile-image {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+{%endblock%}
+
+{%block content%}
+<nav>
+  <div class="nav-wrapper">
+    <a href="#" class="brand-logo">
+      <img src="/static/images/logoicon.jpg" alt="FitTech Logo"> 
+    </a>
+    <ul id="nav-mobile" class="right hide-on-med-and-down">
+      <li><a href="/home">Home</a></li>
+      <li><a href="/workouts">Workouts</a></li>
+      <li><a href="/routines">My Routines</a></li>
+      <li class="dropdown">
+        <a href="#" class="dropdown-toggle" style="margin-top: -1px;">
+         Profile
+        </a>
+        <ul class="dropdown-menu">
+          <li><a href="/logout">Logout</a></li>
+        </ul>
+      </li>  
+    </ul>
+  </div>
+</nav>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<nav class="white black-text" style="padding: 10px">
+  <div class="nav-wrapper">
+      <ul class="flashes">
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+      </ul>
+  </div>
+</nav>
+{% endif %}
+{% endwith %}
+
+<!--Code for filter-->
+  <form class="filter">
+    <div class="row">
+      <label>
+        <input class="with-gap blue" name="bodypart" type="radio" value="all" onchange="this.form.submit()" {{ "checked" if bodypart=="all" }} />
+        <span>All</span>
+      </label>
+       <label>
+        <input class="with-gap blue" name="bodypart" type="radio" value="Forearms" onchange="this.form.submit()" {{ "checked" if bodypart=="Forearms" }} />
+        <span>Forearms</span>
+      </label>
+      <label>
+        <input class="with-gap blue" name="bodypart" type="radio" value="Quadriceps" onchange="this.form.submit()" {{ "checked" if bodypart=="Quadriceps" }} />
+        <span>Quadriceps</span>
+      </label>
+      <label>
+        <input class="with-gap blue" name="bodypart" type="radio" value="Abdominals" onchange="this.form.submit()" {{ "checked" if bodypart=="Abdominals" }} />
+        <span>Abdominals</span>
+      </label>
+      <label>
+        <input class="with-gap blue" name="bodypart" type="radio" value="Lats" onchange="this.form.submit()" {{ "checked" if bodypart=="Lats" }} />
+        <span>Lats</span>
+      </label>
+      <label>
+        <input class="with-gap blue" name="bodypart" type="radio" value="Middle Back" onchange="this.form.submit()" {{ "checked" if bodypart=="Middle Back" }} />
+        <span>Middle Back</span>
+      </label>
+      <label>
+        <input class="with-gap blue" name="bodypart" type="radio" value="Lower Back" onchange="this.form.submit()" {{ "checked" if bodypart=="Lower Back" }} />
+        <span>Lower Back</span>
+      </label>
+      <label>
+        <input class="with-gap blue" name="bodypart" type="radio" value="Shoulders" onchange="this.form.submit()" {{ "checked" if bodypart=="Shoulders" }} />
+        <span>Shoulders</span>
+      </label>
+      <label>
+        <input class="with-gap blue" name="bodypart" type="radio" value="Biceps" onchange="this.form.submit()" {{ "checked" if bodypart=="Biceps" }} />
+        <span>Biceps</span>
+      </label>
+      <label>
+        <input class="with-gap blue" name="bodypart" type="radio" value="Glutes" onchange="this.form.submit()" {{ "checked" if bodypart=="Glutes" }} />
+        <span>Glutes</span>
+      </label>
+      <label>
+        <input class="with-gap blue" name="bodypart" type="radio" value="Triceps" onchange="this.form.submit()" {{ "checked" if bodypart=="Triceps" }} />
+        <span>Triceps</span>
+      </label>
+      <label>
+        <input class="with-gap blue" name="bodypart" type="radio" value="Hamstrings" onchange="this.form.submit()" {{ "checked" if bodypart=="Hamstrings" }} />
+        <span>Hamstrings</span>
+      </label>
+      <label>
+        <input class="with-gap blue" name="bodypart" type="radio" value="Neck" onchange="this.form.submit()" {{ "checked" if bodypart=="Neck" }} />
+        <span>Neck</span>
+      </label>
+      <label>
+        <input class="with-gap blue" name="bodypart" type="radio" value="Chest" onchange="this.form.submit()" {{ "checked" if bodypart=="Chest" }} />
+        <span>Chest</span>
+      </label>
+      <label>
+        <input class="with-gap blue" name="bodypart" type="radio" value="Traps" onchange="this.form.submit()" {{ "checked" if bodypart=="Traps" }} />
+        <span>Traps</span>
+      </label>
+      <label>
+        <input class="with-gap blue" name="bodypart" type="radio" value="Calves" onchange="this.form.submit()" {{ "checked" if bodypart=="Calves" }} />
+        <span>Calves</span>
+      </label>
+      <label>
+        <input class="with-gap blue" name="bodypart" type="radio" value="Abductors" onchange="this.form.submit()" {{ "checked" if bodypart=="Abductors" }} />
+        <span>Abductors</span>
+      </label>
+    </div>
+  </form>
+
+{%if not workout_id%}
+
+<main class="row">
+  <section class="col s12 m12" style="height:100vh; overflow-y:scroll;">
+    <div class="row" style="width: 100%; ">
+
+      {% if title %}
+      <!-- Show pop up box -->
+      <div class="row">
+      <div class="popup-header">
+      <h3 class="center-heading">Create Your Routine! </h3>
+      <h6 class="center-heading">Or add to an existing routine!</a></h6>
+      </div>
+      </div>
+      
+        <div class="popup">
+          {% for routine in routines %}
+          <div class="row">
+            <form id="routinesform" action="/addWorkouts/{{title.id}}" method="POST">
+              <p>
+                <div class="input-box">
+                <label>
+                  
+                  <button class="btn" type="submit" value="{{routine.id}}" name="routine"/>
+                  
+                  <span>{{ routine.name }}</span>
+                </label>
+                </div>
+              </p>
+
+            </form>         
+          </div>
+          {% endfor %}
+          
+      <div class="input-box">
+        <form action="/createRoutine" method="POST">
+          <div class="row">
+            <input placeholder="Create New Routine" name="name" type="text" class="validate">
+          </div>
+          <button type="submit" class="btn">Create</button>
+        </form>
+      </div>
+        </div>
+      {% else %}
+      
+      <!-- Normal display of workouts page-->
+      {%for workout in workouts%}
+  <article class="col s6 m3">
+        <div class="card">
+          <div class="card-image">
+            <a href="{{ url_for('workouts_page', id=workout.id) }}">
+
+              {%if workout.image%}
+            <img src="{{workout.image}}">
+              {%else%}
+              <img src="static/images/logo.jpg">
+              {%endif%}
+            </a>
+            <a class="btn-floating halfway-fab waves-effect waves-light red" href="/workouts/{{workout.title}}"><i class="material-icons">add</i></a>
+          </div>
+          <div class="card-content">
+            <span class="card-title">{{workout.title}}</span>
+            <h8>Muscle Group: {{workout.bodypart}} </h8>
+            <!--For descriptions
+            <p>{{workout.description}}</p>-->
+          </div>
+
+        </div>
+  </article>
+      {%endfor%}
+      {%endif%}
+
+    </div>
+  </section>
+</main>
+
+  {%else%}
+  
+    
+<main class="row">
+  <section class="col s12 m9" style="height:100vh; overflow-y:scroll;">
+    <div class="row" style="width: 100%; ">
+
+      {% if title %}
+      <!-- Show pop up box -->
+      <h3 class="center-heading">Create Your Routine! </h3>
+      <h6 class="center-heading">Or add to an existing routine!</a></h6>
+        <div class="popup">
+          {% for routine in routines %}
+          <div class="row">
+            <form action="/addWorkout/{{ title.workout_id }}" method="POST">
+              <p>
+                <div class="input-box">
+                  <label>
+                    <button class="btn" type="submit" value="{{routine.id}}" name="routine"/>
+                    <span>{{ routine.name }}</span>
+                  </label>
+                  </div>
+              </p>
+              <button type="submit">Add to Routine</button> 
+            </form>
+          </div>
+          {% endfor %}
+          <div class="input-box">
+            <form action="/createRoutine" method="POST">
+              <div class="row">
+                <input placeholder="Create New Routine" name="name" type="text" class="validate">
+              </div>
+              <button type="submit" class="btn">Create</button>
+            </form>
+          </div>
+
+      {% else %}
+
+      <!-- Normal display of workouts page-->
+      {%for workout in workouts%}
+  <article class="col s6 m4">
+        <div class="card">
+          <div class="card-image">
+            <a href="{{ url_for('workouts_page', id=workout.id) }}">
+
+              {%if workout.image%}
+            <img src="{{workout.image}}">
+              {%else%}
+              <img src="static/images/logo.jpg"">
+              {%endif%}
+            </a>
+            <a class="btn-floating halfway-fab waves-effect waves-light red" href="/workouts/{{workout.title}}"><i class="material-icons">add</i></a>
+          </div>
+          <div class="card-content">
+            <span class="card-title">{{workout.title}}</span>
+            <h8>Muscle Group: {{workout.bodypart}} </h8>
+            <!--For descriptions
+            <p>{{workout.description}}</p>-->
+          </div>
+
+        </div>
+  </article>
+      {%endfor%}
+      {%endif%}
+
+    </div>
+  </section>
+
+  
+      <div class="col s12 m3" style="background-color:#0C0C0C" >
+        <h3 style="text-align:center; color:white">{{clicked_title}}</h3>
+        <div class="card-image">
+        {%if clicked_image%}
+        <img src="{{clicked_image}}">
+          {%else%}
+          <img src="static/images/logo.jpg">
+          {%endif%}
+        </div>
+        <div class="card-content">
+        <span class="rating">
+        <h6>Rating: {{clicked_rating}}</h6>
+        </span>
+        <span class="equip">
+        <h6>Equipment: {{clicked_equipment}}</h6>
+        </span>
+      <div class="descrip">
+        <p>{{clicked_description}}</p>
+      </div>
+        </div>
+      </div>
+  
+
+    
+  
+  </main>
+{%endif%}
+
+
+<!--for page numbers-->
+    <div class="row">
+      <div class="pagenumbers">
+      <ul class="pagination col s12 center">
+        {% if workouts.prev_num %}
+        <li class="waves-effect">
+            <a href="{{ url_for('workouts_page', page=workouts.prev_num, bodypart=bodypart) }}"><i class="material-icons">chevron_left</i></a>
+        </li>
+        {% else %}
+        <li class="disabled">
+            <a href="#!"><i class="material-icons">chevron_left</i></a>
+        </li>
+        {% endif %}
+
+        {% for page_num in workouts.iter_pages() %}
+            {% if page_num %}
+                {% if workouts.page == page_num %}
+                <li class="active blue"><a href="#!">{{ page_num }}</a></li>
+                {% else %}
+                <li class="waves-effect"><a href="{{ url_for('workouts_page', page=page_num, bodypart=bodypart) }}">{{ page_num }}</a></li>
+                {% endif %}
+            {% else %}
+                <li class="disabled"><a href="#!">...</a></li>
+            {% endif %}
+        {% endfor %}
+
+        {% if workouts.has_next %}
+        <li class="waves-effect">
+            <a href="{{ url_for('workouts_page', page=workouts.next_num, bodypart=bodypart) }}"><i class="material-icons">chevron_right</i></a>
+        </li>
+        {% else %}
+        <li class="disabled">
+            <a href="#!"><i class="material-icons">chevron_right</i></a>
+        </li>
+        {% endif %}
+    </ul>
+      </div>
+    </div>
+
+    
+  </section>
+{%endblock%}
+
