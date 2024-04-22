@@ -1,6 +1,6 @@
 from flask_jwt_extended import create_access_token, jwt_required, JWTManager, get_jwt_identity, verify_jwt_in_request
 
-from App.models import User
+from App.modelss import User
 
 def login(username, password):
   user = User.query.filter_by(username=username).first()

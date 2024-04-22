@@ -1,4 +1,4 @@
-from App.models import User
+from App.modelss import User
 from App.database import db
 
 def create_user(username, password):

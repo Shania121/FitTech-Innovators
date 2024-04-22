@@ -1,7 +1,7 @@
 from flask_admin.contrib.sqla import ModelView
 from flask_jwt_extended import jwt_required, current_user, unset_jwt_cookies, set_access_cookies
 from flask_admin import Admin
-from App.models import db, User
+from App.modelss import db, User
 
 class AdminView(ModelView):
 
